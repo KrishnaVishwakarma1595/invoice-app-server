@@ -3,16 +3,12 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Invoice } = require('./models.js');
-const multer = require('multer');
-// const fs = require('fs');
-// const path = require('path');
 
 const app = express();
 
 app.use("/public", express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.json());
 
 const allowedOrigins = ['http://localhost:3000/', 'https://invoice-app-server-phi.vercel.app/'];
 
@@ -28,8 +24,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-const upload = multer({ dest: './public/invoices/' });
 
 // routes
 app.get('/', (req, res) => {
@@ -73,30 +67,6 @@ app.post('/api/invoices', async (req, res) => {
 		res.json({ error: error });
 	}
 })
-
-// create multiple invoices by reading a json file
-// app.post('/api/create-invoices', upload.single('invoiceJson'), async (req, res) => {
-//     try {
-//         const file = req.file;
-//         if(file){
-//             const filepath = path.join("/tmp", file.filename);
-//             // const filepath = file.path;
-//             fs.readFile(filepath, 'utf-8', async (err, data) => {
-//                 if(err) res.status(500).send('Error reading file');
-//                 const jsonData = JSON.parse(data);
-//                 console.log(jsonData);
-//                 const invoices = await Invoice.create(jsonData);                
-//                 if(invoices) res.json({ response: invoices });
-//                 else res.json({ message: 'No invoices added!' });
-//             })
-//         } else {
-//             res.json({ message: 'No file uploaded!' });
-//         }
-//     } catch (error) {
-// 		console.log('error', error);
-//         res.json({ error: error });
-//     }
-// })
 
 app.post('/api/updateinvoice', async (req, res) => {
 	try {
