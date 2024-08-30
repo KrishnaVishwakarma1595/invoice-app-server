@@ -8,10 +8,25 @@ const fs = require('fs');
 
 const app = express();
 
+app.use("/public", express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ['http://localhost:3000/', 'https://invoice-app-server-phi.vercel.app/'];
+
+const corsOptions = {
+	origin: function (origin, callback) {
+		if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+			// If the origin is in the allowed list, or if there's no origin (e.g., for curl requests)
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	}
+};
+
+app.use(cors(corsOptions));
 
 const upload = multer({ dest: './public/invoices/' });
 
