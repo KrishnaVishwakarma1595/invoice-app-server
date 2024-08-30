@@ -5,6 +5,7 @@ const cors = require('cors');
 const { Invoice } = require('./models.js');
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 
@@ -78,7 +79,8 @@ app.post('/api/create-invoices', upload.single('invoiceJson'), async (req, res) 
     try {
         const file = req.file;
         if(file){
-            const filepath = file.path;
+            const filepath = path.join("/tmp", file.filename);
+            // const filepath = file.path;
             fs.readFile(filepath, 'utf-8', async (err, data) => {
                 if(err) res.status(500).send('Error reading file');
                 const jsonData = JSON.parse(data);
