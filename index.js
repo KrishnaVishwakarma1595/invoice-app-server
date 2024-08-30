@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
 	'http://localhost:3000/', 
 	'https://invoice-app-server-phi.vercel.app/',
-	'https://invoice-app-iota-black.vercel.app/',
+	'https://invoice-app-iota-black.vercel.app',
 	'https://invoice-kyrnmjbn7-krishnavishwakarma1595s-projects.vercel.app'
 ];
 
@@ -28,7 +28,10 @@ const corsOptions = {
 	}
 };
 
-app.use(cors(corsOptions));
+app.use(cors({
+	allowedHeaders: ['*'],
+	...corsOptions
+}));
 
 // routes
 app.get('/', (req, res) => {
